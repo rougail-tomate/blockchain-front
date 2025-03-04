@@ -10,6 +10,6 @@ type HeaderProps = {
 
 export default function Header(): JSX.Element {
   return (
-    <div>Header</div>
+    <div>this is the Header</div>
   );
 }
