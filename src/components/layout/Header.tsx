@@ -2,7 +2,7 @@ import { JSX } from 'react';
 
 type HeaderProps = {
     title: string;
-    links: { 
+    links: {
         href: string; 
         label: string 
     }[]; 
