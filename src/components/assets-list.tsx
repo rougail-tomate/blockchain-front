@@ -11,7 +11,6 @@ const cards = [
 interface AssetsListProps {
     display_text?: string;
     hide_button: boolean;
-
 }
 
 const AssetsList = ({ display_text, hide_button }: AssetsListProps): JSX.Element => {

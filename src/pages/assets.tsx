@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import pikachu from '../../public/pikq.jpg';
-import AssetsList from "@/components/assets_list";
+import AssetsList from "@/components/assets-list";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
 
