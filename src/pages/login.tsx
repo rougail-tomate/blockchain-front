@@ -11,6 +11,8 @@ const LoginPage = (): JSX.Element => {
         password: ""
     });
 
+    const [error, setError] = useState(false);
+
     const router = useRouter();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
@@ -24,8 +26,8 @@ const LoginPage = (): JSX.Element => {
 
             <Image src={logo} alt="logo" className="h-80 w-80"/>
 
-            <div className=" pt-20">
-                <h1 className="text-3xl">Login</h1>
+            <div>
+                {error && <h1 className="text-red-500">Error: wrong email or password !</h1>}
             </div>
 
             <div className="flex flex-col mt-10">
@@ -62,6 +64,9 @@ const LoginPage = (): JSX.Element => {
                     
                     if (res.status == 200)
                         router.push("/");
+                    else {
+                        setError(true);
+                    } 
 
                 }}>Submit</button>
         </div>

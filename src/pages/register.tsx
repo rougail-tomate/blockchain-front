@@ -12,6 +12,8 @@ const RegisterPage = (): JSX.Element => {
         password: ""
     });
 
+    const [error, setError] = useState(false);
+
     const router = useRouter();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
@@ -26,10 +28,17 @@ const RegisterPage = (): JSX.Element => {
 
             <Image src={logo} alt="logo" className="h-80 w-80"/>
 
+            <div>
+                {error && <h1 className="text-red-500">Error: User already exists!</h1>}
+            </div>
+
             <div className=" pt-20">
                 <h1 className="text-3xl">Register</h1>
             </div>
 
+            <div>
+                <h1 className={ `${error ? "": "hidden"}` }>Error: user already exist !</h1>
+            </div>
             <div className="flex flex-col mt-10">
                 <div className="flex mb-5">
                     <p>Already have an account ? </p> 
@@ -63,6 +72,14 @@ const RegisterPage = (): JSX.Element => {
                             bg-transparent rounded-full w-32 h-10 
                             hover:bg-light_green hover:text-light_orange"
                 onClick={ async () => {
+                    if (formData.email === "" ||
+                        formData.password === "" ||
+                        formData.username === ""
+                    ) {
+                        setError(true);
+                        return;
+                    }
+
                     const res = await Register({
                         email: formData.email,
                         username: formData.username,
@@ -71,8 +88,10 @@ const RegisterPage = (): JSX.Element => {
                     
                     if (res.status == 200)
                         router.push("/");
-
-                }}>Submit</button>
+                    else {
+                        setError(true);
+                    } 
+                 }}>Submit</button>
         </div>
      );
 }
