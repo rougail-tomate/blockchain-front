@@ -2,11 +2,11 @@
 import { type ReactNode, createContext, useRef, useContext } from 'react'
 import { useStore } from 'zustand'
 
-import { type UserStore, createUserStore } from 'stores/user.store'
+import { type UserStore, createUserStore, initUserStore } from 'stores/user.store'
 
 export type UserStoreApi = ReturnType<typeof createUserStore>
 
-export const UserStoreContext = createContext<UserStoreApi>()
+export const UserStoreContext = createContext<UserStoreApi | undefined>(undefined)
 
 export interface UserStoreProviderProps{
     children: ReactNode
@@ -17,7 +17,7 @@ export const UserStoreProvider = ({
 }: UserStoreProviderProps) => {
     const storeRef = useRef<UserStoreApi>(null)
     if (!storeRef.current) {
-        storeRef.current = createUserStore()
+        storeRef.current = createUserStore(initUserStore())
     }
 
     return (

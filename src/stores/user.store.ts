@@ -9,11 +9,7 @@ export type UserState = {
 }
 
 export type UserAction = {
-    setId: () => void
-    setMetamaskId: (id: string) => void
-    setUsername: () => void
-    setEmail: () => void
-    setPassword: () => void
+    resetData: () => void
 }
 
 export type UserStore = UserState & UserAction
@@ -27,6 +23,7 @@ export const initUserStore = (): UserState => {
         password: null,
     }
 }
+
 export const defaultUserState: UserState = {
     metamaskId: 'test',
     userId: 0,
@@ -38,12 +35,8 @@ export const defaultUserState: UserState = {
 export const createUserStore = (
     initState: UserState = defaultUserState,
 ) => {
-    return createStore<UserState>()((set) => ({
+    return createStore<UserStore>()((set) => ({
         ...initState,
-        setId: () => set((state) => ({ userId: state.userId })),
-        setMetamaskId: (id: string) => set((state) => ({ metamaskId: state.metamaskId })),
-        setUsername: () => set((state) => ({ username: state.username })),
-        setEmail: () => set((state) => ({ email: state.email })),
-        setPassword: () => set((state) => ({ password: state.password })),
+        resetData: () => set((state) => ({}))
     }))
 }

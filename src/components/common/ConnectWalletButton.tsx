@@ -1,3 +1,4 @@
+'use client'
 import { useSDK } from '@metamask/sdk-react';
 import { useUserStore } from "@/providers/user-store.provider";
 import { formatAddress } from '@utils/utils';
@@ -8,7 +9,7 @@ export function ConnectWalletButton() {
 
   const connect = async () => {
     try {
-      await sdk?.connect().then((account) => store.setMetamaskId(account[0]));
+      await sdk?.connect().then((account) => store.metamaskId = account[0]);
     } catch (err) {
       console.log(account);
       console.warn(`No accounts found`, err);
