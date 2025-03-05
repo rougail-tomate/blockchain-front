@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import logo from '../../../public/blockchain-logo.svg';
+
 export default function Navbar() {
   return (
     <nav className={"bg-background shadow-md"}>
