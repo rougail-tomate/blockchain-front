@@ -1,11 +1,14 @@
 import { useSDK } from '@metamask/sdk-react';
+import { useUserStore } from "@/providers/user-store.provider";
+import { formatAddress } from '@utils/utils';
 
 export function ConnectWalletButton() {
+  const store = useUserStore((state) => state)
   const { sdk, connected, connecting, account } = useSDK();
 
   const connect = async () => {
     try {
-      await sdk?.connect();
+      await sdk?.connect().then((account) => store.setMetamaskId(account[0]));
     } catch (err) {
       console.log(account);
       console.warn(`No accounts found`, err);
@@ -23,7 +26,7 @@ export function ConnectWalletButton() {
       {connected ? (
         <div>
           <button onClick={disconnect}>Disconnect</button>
-          <p>{account}</p>
+          <p>{formatAddress(account)}</p>
         </div>
       ) : (
         <div>
