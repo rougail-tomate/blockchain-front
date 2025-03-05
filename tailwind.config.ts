@@ -13,7 +13,8 @@ export default {
         foreground: "var(--foreground)",
         light_green: "#5BECC0",
         light_orange: "#F6AE5C",
-        salmon: "#ECB7D6"
+        salmon: "#ECB7D6",
+        bg_color: "#030116",
       },
     },
   },

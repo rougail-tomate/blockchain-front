@@ -1,9 +1,12 @@
-import { JSX } from "react"; import pikachu from '../../public/pikq.jpg';
+import { JSX } from "react";
+import pikachu from '../../public/pikq.jpg';
 import AssetsList from "@/components/assets_list";
+import Navbar from "@/components/layout/Navbar";
 
 const Assets = (): JSX.Element => {
     return (
         <div>
+            <Navbar />
             <div className="text-white flex p-8 items-center justify-center">
                 <div className="flex flex-col md:flex-row gap-6 md:gap-[2vw] w-full max-w-5xl">
                     
