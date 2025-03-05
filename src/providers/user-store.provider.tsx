@@ -6,7 +6,7 @@ import { type UserStore, createUserStore } from 'stores/user.store'
 
 export type UserStoreApi = ReturnType<typeof createUserStore>
 
-export const UserStoreContext = createContext<UserStoreApi | undefined>(undefined)
+export const UserStoreContext = createContext<UserStoreApi>()
 
 export interface UserStoreProviderProps{
     children: ReactNode

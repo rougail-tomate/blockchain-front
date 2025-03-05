@@ -18,12 +18,21 @@ export type UserAction = {
 
 export type UserStore = UserState & UserAction
 
+export const initUserStore = (): UserState => {
+    return {
+        metamaskId: null,
+        userId: null,
+        username: null,
+        email: null,
+        password: null,
+    }
+}
 export const defaultUserState: UserState = {
-    metamaskId: null,
-    userId: null,
-    username: null,
-    email: null,
-    password: null,
+    metamaskId: 'test',
+    userId: 0,
+    username: 'test_username',
+    email: 'test@gmail.com',
+    password: 'azerty',
 }
 
 export const createUserStore = (
