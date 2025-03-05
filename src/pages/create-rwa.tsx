@@ -1,11 +1,10 @@
 import Navbar from "@/components/layout/Navbar";
-import React from "react";
 
-export default function Assets() {
+export default function Marketplace() {
     return (
         <div className="bg-red-700">
             <Navbar />
-            <p>hello world assets pages</p>
+            <p>hello world create assets</p>
         </div>
     )
 }
