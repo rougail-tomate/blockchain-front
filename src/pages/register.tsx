@@ -2,7 +2,7 @@ import { JSX, useState } from "react";
 import Image from "next/image";
 import logo from '../../public/blockchain-logo.svg';
 import Input from "@/components/layout/Input";
-import Register from "services/auth.service";
+import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
 
 const RegisterPage = (): JSX.Element => {
@@ -34,8 +34,8 @@ const RegisterPage = (): JSX.Element => {
                 <div className="flex mb-5">
                     <p>Already have an account ? </p> 
                     <button onClick={ () => {
-                            console.log("Redirect login page");
-                    }} className="text-light_orange pl-3">login here !</button>
+                        router.push("/login");
+                    }} className="text-light_orange pl-3">Login here !</button>
                 </div>
                 <Input 
                     placeholder="Email"
