@@ -1,3 +1,4 @@
+import { UserStore } from "@stores/user.store";
 import axios from "axios";
 
 interface RegisterData {
@@ -11,7 +12,7 @@ interface LoginData {
     password: string;
 }
 
-export async function Register(data: RegisterData) {
+export async function Register(data: RegisterData, store: UserStore) {
     try {
         const res = await axios.post(
             "http://localhost:8000/register",
@@ -27,6 +28,9 @@ export async function Register(data: RegisterData) {
             },
         );
         console.log(res);
+        store.email = res.data.email;
+        store.password = res.data.password;
+        store.username = res.data.username;
         return res;
     } catch(error) {
         if (axios.isAxiosError(error)) {
@@ -48,7 +52,7 @@ export async function Register(data: RegisterData) {
     }
 }
 
-export async function Login(data: LoginData) {
+export async function Login(data: LoginData, store: UserStore) {
     try {
         const res = await axios.post(
             "http://localhost:8000/login",
@@ -63,6 +67,9 @@ export async function Login(data: LoginData) {
             }
         );
 
+        store.email = res.data.email;
+        store.password = res.data.password;
+        store.username = res.data.username;
         console.log(res);
         return res;
 

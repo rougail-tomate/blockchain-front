@@ -4,6 +4,7 @@ import logo from '../../public/blockchain-logo.svg';
 import Input from "@/components/layout/Input";
 import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
+import { useUserStore } from "@/providers/user-store.provider";
 
 const RegisterPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const RegisterPage = (): JSX.Element => {
     });
 
     const [error, setError] = useState(false);
+
+    const store = useUserStore((state) => state);
 
     const router = useRouter();
 
@@ -84,7 +87,7 @@ const RegisterPage = (): JSX.Element => {
                         email: formData.email,
                         username: formData.username,
                         password: formData.password
-                    });
+                    }, store);
                     
                     if (res.status == 200)
                         router.push("/");

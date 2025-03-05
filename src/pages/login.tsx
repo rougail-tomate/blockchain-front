@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Input from "@/components/layout/Input";
 import { Login } from "services/auth.service";
+import { useUserStore } from "@/providers/user-store.provider";
 
 const LoginPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const LoginPage = (): JSX.Element => {
     });
 
     const [error, setError] = useState(false);
+
+    const store = useUserStore((state) => state);
 
     const router = useRouter();
 
@@ -60,7 +63,7 @@ const LoginPage = (): JSX.Element => {
                     const res = await Login({
                         username: formData.username,
                         password: formData.password
-                    });
+                    }, store);
                     
                     if (res.status == 200)
                         router.push("/");
