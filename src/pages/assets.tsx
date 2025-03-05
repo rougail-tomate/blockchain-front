@@ -64,7 +64,7 @@ const Assets = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-        <AssetsList display_text="Explore other’s pokemon assets:" hide_button={ false }></AssetsList>
+        <AssetsList display_text="Explore other's pokemon assets:" hide_button={ false }></AssetsList>
         </div>
     );
 };
