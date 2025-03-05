@@ -2,6 +2,7 @@ import { JSX } from "react";
 import pikachu from '../../public/pikq.jpg';
 import AssetsList from "@/components/assets_list";
 import Navbar from "@/components/layout/Navbar";
+import React from "react";
 
 const Assets = (): JSX.Element => {
     return (
