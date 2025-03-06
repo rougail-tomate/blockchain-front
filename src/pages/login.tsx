@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Input from "@/components/layout/Input";
 import { Login } from "services/auth.service";
 import { useUserStore } from "@/providers/user-store.provider";
+import Button from "@/components/common/Button";
 
 const LoginPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -55,10 +56,7 @@ const LoginPage = (): JSX.Element => {
 
                 {/* TODO !: Place MetaMask button here */}
             </div>
-            <button 
-                className="border border-light_green
-                            bg-transparent rounded-full w-32 h-10 
-                            hover:bg-light_green hover:text-light_orange"
+            <Button 
                 onClick={ async () => {
                     const res = await Login({
                         username: formData.username,
@@ -70,8 +68,7 @@ const LoginPage = (): JSX.Element => {
                     else {
                         setError(true);
                     } 
-
-                }}>Submit</button>
+                }}>Submit</Button>
         </div>
     );
 }

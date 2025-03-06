@@ -5,6 +5,7 @@ import Input from "@/components/layout/Input";
 import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/providers/user-store.provider";
+import Button from "@/components/common/Button";
 
 const RegisterPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -70,10 +71,7 @@ const RegisterPage = (): JSX.Element => {
 
                 {/* TODO !: Place MetaMask button here */}
             </div>
-            <button 
-                className="border border-light_green
-                            bg-transparent rounded-full w-32 h-10 
-                            hover:bg-light_green hover:text-light_orange"
+            <Button 
                 onClick={ async () => {
                     if (formData.email === "" ||
                         formData.password === "" ||
@@ -94,7 +92,7 @@ const RegisterPage = (): JSX.Element => {
                     else {
                         setError(true);
                     } 
-                 }}>Submit</button>
+                 }}>Submit</Button>
         </div>
      );
 }
