@@ -5,6 +5,9 @@ import Input from "@/components/layout/Input";
 import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/providers/user-store.provider";
+import { ConnectWalletButton } from "@/components/common/ConnectWalletButton";
+import { MetaMaskProvider } from '@metamask/sdk-react';
+
 
 const RegisterPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -12,7 +15,16 @@ const RegisterPage = (): JSX.Element => {
         username: "",
         password: ""
     });
-
+    const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
+    const sdkOptions = {
+        logging: { developerMode: false },
+        checkInstallationImmediately: false,
+        dappMetadata: {
+          name: "Next-Metamask-Boilerplate",
+          url: host, // using the host constant defined above
+        },
+    };
+    const [isWalletConnected, setWalletConnected] = useState(false);
     const [error, setError] = useState(false);
 
     const store = useUserStore((state) => state);
@@ -27,6 +39,7 @@ const RegisterPage = (): JSX.Element => {
     };
 
     return (
+        <MetaMaskProvider sdkOptions={sdkOptions}>
         <div className="flex flex-col items-center justify-center">
 
             <Image src={logo} alt="logo" className="h-80 w-80"/>
@@ -70,32 +83,37 @@ const RegisterPage = (): JSX.Element => {
 
                 {/* TODO !: Place MetaMask button here */}
             </div>
-            <button 
-                className="border border-light_green
-                            bg-transparent rounded-full w-32 h-10 
-                            hover:bg-light_green hover:text-light_orange"
-                onClick={ async () => {
-                    if (formData.email === "" ||
-                        formData.password === "" ||
-                        formData.username === ""
-                    ) {
-                        setError(true);
-                        return;
-                    }
-
-                    const res = await Register({
-                        email: formData.email,
-                        username: formData.username,
-                        password: formData.password
-                    }, store);
-                    
-                    if (res.status == 200)
-                        router.push("/");
-                    else {
-                        setError(true);
-                    } 
-                 }}>Submit</button>
+            { !isWalletConnected ? (
+                <ConnectWalletButton setConnected={setWalletConnected}/>
+            ) : (
+                    <button 
+                    className="border border-light_green
+                                bg-transparent rounded-full w-32 h-10 
+                                hover:bg-light_green hover:text-light_orange"
+                    onClick={ async () => {
+                        if (formData.email === "" ||
+                            formData.password === "" ||
+                            formData.username === ""
+                        ) {
+                            setError(true);
+                            return;
+                        }
+    
+                        const res = await Register({
+                            email: formData.email,
+                            username: formData.username,
+                            password: formData.password
+                        }, store);
+                        
+                        if (res.status == 200)
+                            router.push("/");
+                        else {
+                            setError(true);
+                        } 
+                     }}>Submit</button>
+                )}
         </div>
+        </MetaMaskProvider>
      );
 }
 

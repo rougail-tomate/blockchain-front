@@ -25,7 +25,6 @@ export default function Auth() {
             <MetaMaskProvider sdkOptions={sdkOptions}>
                 <ConnectWalletButton />
             </MetaMaskProvider>
-            <p>store id = {store.metamaskId}</p>
         </div>
     )
 }
