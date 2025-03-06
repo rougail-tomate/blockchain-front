@@ -5,19 +5,29 @@ import upload from '../../public/upload-icon.png'
 import Navbar from "@/components/layout/Navbar";
 import Button from "@/components/common/Button";
 import InputFloat from "@/components/layout/Input-float";
+import { registerNFT } from "services/nft.service";
+import { useUserStore } from "@/providers/user-store.provider";
 
-const CreateRwaPage = (): JSX.Element => {
+export default function CreateRwaPage(): JSX.Element {
     const [image, setImage] = useState<string | null>(null);
     const [name, setName] = useState("");
     const [psaNumber, setPsaNumber] = useState("");
     const [description, setDescription] = useState("");
     const [start_price, setStartingPrice] = useState("");
+    const [base64Image, setBase64Image] = useState<string | null>(null);
+    const { access_token, refresh_token } = useUserStore((state) => state);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+        const file = event.target.files?.[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
+            // Create a FileReader to convert the image to Base64
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setBase64Image(base64String);  // Store Base64 string
+                setImage(URL.createObjectURL(file));  // For image preview
+            };
+            reader.readAsDataURL(file);  // Convert the file to Base64
         }
     };
 
@@ -39,7 +49,7 @@ const CreateRwaPage = (): JSX.Element => {
 
                     <div className="w-1/2 h-64 flex items-center justify-center border border-light_green rounded-lg relative overflow-hidden">
                         { image ? (
-                            <img src={image} alt="Uploaded" className="w-full h-full object-contain" />
+                            <img src={ image } alt="Uploaded" className="w-full h-full object-contain" />
                         ) : (
                             <label className="cursor-pointer flex flex-col items-center">
                                 <img src={ upload.src } className="w-12 h-12 text-gray-400" />
@@ -78,7 +88,19 @@ const CreateRwaPage = (): JSX.Element => {
                             className="border border-light_green bg-transparent focus:ring-2 focus:ring-light_green text-white p-2 rounded w-full" 
                         />
                         <div className="flex justify-center items-center">
-                            <Button onClick={ () => {} }>Submit</Button>
+                            <Button onClick={ async () => {
+                                await registerNFT({
+                                    description,
+                                    number: parseInt(psaNumber),
+                                    image: base64Image,
+                                    price: start_price,
+                                    title: name
+                                },
+                                {
+                                    access_token,
+                                    refresh_token
+                                });
+                            } }>Submit</Button>
                         </div>
                     </div>
                 </div>
@@ -86,5 +108,3 @@ const CreateRwaPage = (): JSX.Element => {
         </div>
     );
 }
-
-export default CreateRwaPage;

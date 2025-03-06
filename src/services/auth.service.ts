@@ -12,13 +12,17 @@ interface LoginData {
     password: string;
 }
 
-interface TokenRefresh {
-    access_token: string;
-    refresh_token: string;
-}
+export async function refreshAccessToken(refresh_token: string) {
 
-export async function refreshAccessToken() {
-
+    const res = await axios.post(
+        "http://localhost:8000/refresh-token",
+        {
+            headers: {
+               'Content-Type': 'application/json',
+               'Authorization': 'Bearer '
+            }
+        }
+    );
 }
 
 export async function Register(data: RegisterData, store: UserStore) {
