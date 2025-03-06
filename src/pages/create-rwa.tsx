@@ -75,7 +75,7 @@ const CreateRwaPage = (): JSX.Element => {
                             placeholder="Description" 
                             value={description} 
                             onChange={(e) => setDescription(e.target.value)} 
-                            className="border border-light_green bg-transparent text-white p-2 rounded w-full" 
+                            className="border border-light_green bg-transparent focus:ring-2 focus:ring-light_green text-white p-2 rounded w-full" 
                         />
                         <div className="flex justify-center items-center">
                             <Button onClick={ () => {} }>Submit</Button>

@@ -16,6 +16,7 @@ const RegisterPage = (): JSX.Element => {
         username: "",
         password: ""
     });
+
     const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
     const sdkOptions = {
         logging: { developerMode: false },

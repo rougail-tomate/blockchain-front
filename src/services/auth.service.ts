@@ -12,6 +12,15 @@ interface LoginData {
     password: string;
 }
 
+interface TokenRefresh {
+    access_token: string;
+    refresh_token: string;
+}
+
+export async function refreshAccessToken() {
+
+}
+
 export async function Register(data: RegisterData, store: UserStore) {
     try {
         const res = await axios.post(

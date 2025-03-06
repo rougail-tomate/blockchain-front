@@ -34,6 +34,11 @@ const LoginPage = (): JSX.Element => {
                 {error && <h1 className="text-red-500">Error: wrong email or password !</h1>}
             </div>
 
+
+            <div className=" pt-20">
+                <h1 className="text-3xl">Login</h1>
+            </div>
+
             <div className="flex flex-col mt-10">
                 <div className="flex mb-5">
                     <p>Don't have an account ? </p> 
