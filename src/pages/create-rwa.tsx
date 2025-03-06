@@ -3,18 +3,28 @@ import { JSX } from "react"
 import { useState } from "react";
 import upload from '../../public/upload-icon.png'
 import Navbar from "@/components/layout/Navbar";
+import Button from "@/components/common/Button";
+import InputFloat from "@/components/layout/Input-float";
 
 const CreateRwaPage = (): JSX.Element => {
     const [image, setImage] = useState<string | null>(null);
     const [name, setName] = useState("");
     const [psaNumber, setPsaNumber] = useState("");
     const [description, setDescription] = useState("");
+    const [start_price, setStartingPrice] = useState("");
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setImage(imageUrl);
+        }
+    };
+
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^\d*\.?\d*$/.test(value)) {  // Allows only numbers and a single decimal point
+            setStartingPrice(value);
         }
     };
 
@@ -41,27 +51,35 @@ const CreateRwaPage = (): JSX.Element => {
 
                     {/* Right: Form Fields */}
                     <div className="flex flex-col gap-4 w-1/2">
-                        <input 
-                            type="text" 
+                        <Input 
                             placeholder="Name" 
                             value={name} 
                             onChange={(e) => setName(e.target.value)} 
-                            className="border border-light_green bg-transparent text-white p-2 rounded w-full" 
+                            className="w-full" 
                         />
-                        <input 
-                            type="text" 
+                        <Input 
                             placeholder="PSA Number" 
                             value={psaNumber} 
                             onChange={(e) => setPsaNumber(e.target.value)} 
-                            className="border border-light_green bg-transparent text-white p-2 rounded w-full" 
+                            className="w-full" 
                         />
+
+                        <InputFloat
+                            placeholder="Starting Price ETH" 
+                            value={ start_price.toString() } 
+                            onChange={ handlePriceChange } 
+                            className="w-full" 
+                        />
+
                         <textarea 
                             placeholder="Description" 
                             value={description} 
                             onChange={(e) => setDescription(e.target.value)} 
                             className="border border-light_green bg-transparent text-white p-2 rounded w-full" 
                         />
-                        <button className="border border-light_green text-white bg-transparent hover:border-light_green px-4 py-2 rounded">Submit</button>
+                        <div className="flex justify-center items-center">
+                            <Button onClick={ () => {} }>Submit</Button>
+                        </div>
                     </div>
                 </div>
             </div>
