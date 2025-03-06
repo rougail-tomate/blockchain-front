@@ -27,9 +27,9 @@ export async function Register(data: RegisterData, store: UserStore) {
                 },
             },
         );
-        console.log(res);
+        store.userId = res.data.id
         store.email = res.data.email;
-        store.password = res.data.password;
+        store.password = data.password;
         store.username = res.data.username;
         return res;
     } catch(error) {
@@ -67,6 +67,7 @@ export async function Login(data: LoginData, store: UserStore) {
             }
         );
 
+        store.userId = res.data.id
         store.email = res.data.email;
         store.password = res.data.password;
         store.username = res.data.username;
