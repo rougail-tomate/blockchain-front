@@ -1,7 +1,7 @@
 import { JSX } from "react";
 
 interface SubmitButtonProps {
-     onClick: (data?: any) => any;
+    onClick: (data?: any) => any;
     children: string;
 }
 const SubmitButton = ( { onClick, children }: SubmitButtonProps ): JSX.Element => {

@@ -6,6 +6,9 @@ import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/providers/user-store.provider";
 import Button from "@/components/common/Button";
+import { ConnectWalletButton } from "@/components/common/ConnectWalletButton";
+import { MetaMaskProvider } from '@metamask/sdk-react';
+
 
 const RegisterPage = (): JSX.Element => {
     const [formData, setFormData] = useState({
@@ -13,7 +16,16 @@ const RegisterPage = (): JSX.Element => {
         username: "",
         password: ""
     });
-
+    const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
+    const sdkOptions = {
+        logging: { developerMode: false },
+        checkInstallationImmediately: false,
+        dappMetadata: {
+          name: "Next-Metamask-Boilerplate",
+          url: host, // using the host constant defined above
+        },
+    };
+    const [isWalletConnected, setWalletConnected] = useState(false);
     const [error, setError] = useState(false);
 
     const store = useUserStore((state) => state);
@@ -28,6 +40,7 @@ const RegisterPage = (): JSX.Element => {
     };
 
     return (
+        <MetaMaskProvider sdkOptions={sdkOptions}>
         <div className="flex flex-col items-center justify-center">
 
             <Image src={logo} alt="logo" className="h-80 w-80"/>
@@ -71,6 +84,9 @@ const RegisterPage = (): JSX.Element => {
 
                 {/* TODO !: Place MetaMask button here */}
             </div>
+            { !isWalletConnected ? (
+                <ConnectWalletButton setConnected={setWalletConnected}/>
+            ) : (
             <Button 
                 onClick={ async () => {
                     if (formData.email === "" ||
@@ -93,7 +109,9 @@ const RegisterPage = (): JSX.Element => {
                         setError(true);
                     } 
                  }}>Submit</Button>
+                )}
         </div>
+        </MetaMaskProvider>
      );
 }
 
