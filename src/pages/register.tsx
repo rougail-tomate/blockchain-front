@@ -43,7 +43,7 @@ const RegisterPage = (): JSX.Element => {
         <MetaMaskProvider sdkOptions={sdkOptions}>
         <div className="flex flex-col items-center justify-center">
 
-            <Image src={logo} alt="logo" className="h-80 w-80"/>
+            <Image src={logo} alt="logo" className="h-80 wbru-80"/>
 
             <div>
                 {error && <h1 className="text-red-500">Error: User already exists!</h1>}
