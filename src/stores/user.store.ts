@@ -6,6 +6,8 @@ export type UserState = {
     username: string | null
     email: string | null
     password: string | null
+    access_token: string | null
+    refresh_token: string | null
 }
 
 export type UserAction = {
@@ -21,6 +23,8 @@ export const initUserStore = (): UserState => {
         username: null,
         email: null,
         password: null,
+        access_token: null,
+        refresh_token: null
     }
 }
 
@@ -30,6 +34,8 @@ export const defaultUserState: UserState = {
     username: 'test_username',
     email: 'test@gmail.com',
     password: 'azerty',
+    access_token: null,
+    refresh_token: null
 }
 
 export const createUserStore = (
