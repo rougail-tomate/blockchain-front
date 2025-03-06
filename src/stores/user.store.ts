@@ -1,4 +1,5 @@
 import { createStore } from 'zustand/vanilla'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type UserState = {
     metamaskId: string | null
@@ -38,11 +39,28 @@ export const defaultUserState: UserState = {
     refresh_token: null
 }
 
+// export const createUserStore = (
+//     initState: UserState = defaultUserState,
+// ) => {
+//     return createStore<UserStore>()((set) => ({
+//         ...initState,
+//         resetData: () => set((state) => ({}))
+//     }))
+// }
+
 export const createUserStore = (
     initState: UserState = defaultUserState,
 ) => {
-    return createStore<UserStore>()((set) => ({
-        ...initState,
-        resetData: () => set((state) => ({}))
-    }))
+    return createStore<UserStore>()(
+        persist(
+            (set) => ({
+                ...initState,
+                resetData: () => set(initUserStore())
+            }),
+            {
+                name: 'user-storage',
+                storage: createJSONStorage(() => localStorage)
+            }
+        )
+    )
 }

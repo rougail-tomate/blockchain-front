@@ -37,10 +37,12 @@ export async function Register(data: RegisterData, store: UserStore) {
                 },
             },
         );
-        store.userId = res.data.id
-        store.email = res.data.email;
+        store.access_token = res.data.access_token;
+        store.refresh_token = res.data.refresh_token
+        store.userId = res.data.user.id
+        store.email = res.data.user.email;
         store.password = data.password;
-        store.username = res.data.username;
+        store.username = res.data.user.username;
         console.log(res)
         return res;
     } catch(error) {
