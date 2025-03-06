@@ -1,5 +1,5 @@
 'use client'
-import { type ReactNode, createContext, useRef, useContext } from 'react'
+import { type ReactNode, createContext, useRef, useState, useEffect, useContext } from 'react'
 import { useStore } from 'zustand'
 
 import { type UserStore, createUserStore, initUserStore } from 'stores/user.store'
@@ -16,13 +16,17 @@ export const UserStoreProvider = ({
     children,
 }: UserStoreProviderProps) => {
     const storeRef = useRef<UserStoreApi>(null)
+    const [isHydrated, setIsHydrated] = useState(false)
     if (!storeRef.current) {
         storeRef.current = createUserStore(initUserStore())
     }
 
+    useEffect(() => {
+        setIsHydrated(true)
+    }, [])
     return (
         <UserStoreContext.Provider value={storeRef.current}>
-            {children}
+            {isHydrated ? children : null}
         </UserStoreContext.Provider>
     )
 }
