@@ -1,7 +1,6 @@
 'use client'
 import { useSDK } from '@metamask/sdk-react';
 import { useUserStore } from "@/providers/user-store.provider";
-import { formatAddress } from '@utils/utils';
 
 interface ConnectWalletButtonProps {
   setConnected: React.Dispatch<React.SetStateAction<boolean>>;

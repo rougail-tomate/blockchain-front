@@ -20,6 +20,7 @@ export async function Register(data: RegisterData, store: UserStore) {
                 username: data.username,
                 email: data.email,
                 password: data.password,
+                id_metamask: store.metamaskId
             },
             {
                 headers: {
@@ -31,6 +32,7 @@ export async function Register(data: RegisterData, store: UserStore) {
         store.email = res.data.email;
         store.password = data.password;
         store.username = res.data.username;
+        console.log(res)
         return res;
     } catch(error) {
         if (axios.isAxiosError(error)) {
@@ -62,15 +64,14 @@ export async function Login(data: LoginData, store: UserStore) {
             },
             {
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
                 },
             }
         );
-
-        store.userId = res.data.id
-        store.email = res.data.email;
-        store.password = res.data.password;
-        store.username = res.data.username;
+        store.username = data.username
+        store.password = data.password
+        store.access_token = res.data.access_token;
+        store.refresh_token = res.data.refresh_token
         console.log(res);
         return res;
 
