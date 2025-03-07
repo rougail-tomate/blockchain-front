@@ -35,7 +35,7 @@ const LoginPage = (): JSX.Element => {
 
             <div className="flex flex-col mt-10">
                 <div className="flex mb-5">
-                    <p>Don't have an account ? </p> 
+                    <p>Don&#39t have an account ? </p> 
                     <button onClick={ () => {
                         router.push("/register");
                     }} className="text-light_orange pl-3">Register here !</button>
