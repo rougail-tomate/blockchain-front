@@ -15,6 +15,7 @@ export default {
         light_orange: "#F6AE5C",
         salmon: "#ECB7D6",
         bg_color: "#030116",
+        deep_purple: "#050223"
       },
     },
   },

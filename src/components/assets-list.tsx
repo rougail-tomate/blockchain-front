@@ -6,6 +6,7 @@ export interface AssetsData {
     image: string;
     price: string;
     cert_number: number;
+    owner_id: number;
 }
 
 export interface FullAssetData extends AssetsData {
@@ -51,7 +52,7 @@ const AssetsList = ({ display_text, hide_button, cards, router, button_text }: A
                                         }}
                                         className="border border-light_green text-light_green px-6 py-1 rounded-full text-sm"
                                     >
-                                        {button_text === undefined ? "Buy" : button_text}
+                                        {button_text === undefined ? "View" : button_text}
                                     </button>
                                     <p className="text-light_orange text-xs">{card.price + " ETH"}</p>
                                 </div>

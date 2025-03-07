@@ -62,7 +62,8 @@ export async function pullNFTS(): Promise<AssetsData[]> {
             image: card.image,
             title: card.title,
             price: card.price,
-            cert_number: card.cert_number
+            cert_number: card.cert_number,
+            owner_id: card.owner_id
         });
     });
 
@@ -109,7 +110,8 @@ export async function pullUserNFTS(user_toks: UserTokens): Promise<AssetsData[]>
             image: card.image,
             title: card.title,
             price: card.price,
-            cert_number: card.cert_number
+            cert_number: card.cert_number,
+            owner_id: card.owner_id
         });
     });
     console.log("Pull user nfts: ", res);

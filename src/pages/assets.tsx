@@ -1,10 +1,10 @@
 import { JSX, useEffect, useState } from "react";
-import pikachu from '../../public/pikq.jpg';
 import AssetsList, { AssetsData, FullAssetData } from "@/components/assets-list";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
 import { pullNFT, pullNFTS } from "services/nft.service";
 import { useRouter } from "next/router";
+import ScrollableAreaComponent from "@/components/scrollable-area";
 
 const Assets = (): JSX.Element => {
     const [cards, setCards] = useState<AssetsData[]>([]);
@@ -35,7 +35,8 @@ const Assets = (): JSX.Element => {
                     image: res.image,
                     price: res.price,
                     title: res.title,
-                    user_id: res.user_id
+                    user_id: res.user_id,
+                    owner_id: res.user_id
                 });
             } catch(error) {
                 console.error("Error fetching nft: ", error);
@@ -65,13 +66,13 @@ const Assets = (): JSX.Element => {
                 <div className="flex flex-col md:flex-row gap-6 md:gap-[2vw] w-full max-w-5xl">
 
                     {/* Left image */}
-                    <div className="flex-grow flex md:mr-[5vw]">
+                   <div className="flex md:mr-[5vw] justify-center items-center">
                         <img 
-                            src={ selectedCard?.image } 
+                            src={selectedCard?.image} 
                             alt="Card Image" 
-                            className="rounded w-full h-[350px] object-cover" // Fixed height and object-cover to ensure proper scaling
+                            className="rounded w-full h-[350px] object-contain" // Changed to object-contain to ensure the entire image is visible
                         />
-                    </div>
+                    </div> 
 
                     {/* Vertical line */}
                     <div className="hidden md:block w-0.5 bg-neutral-100 dark:bg-white/10"></div>
@@ -96,7 +97,7 @@ const Assets = (): JSX.Element => {
                             </div>
 
                             {/* Mint button */}
-                            <div className="mt-2">
+                            <div className="mt-2 mb-5">
                                 {
                                     ((selectedCard?.user_id) as number == parseInt(localStorage.getItem("userId") as string)) ?
                                         // Other nft
@@ -111,6 +112,11 @@ const Assets = (): JSX.Element => {
                                 }
                             </div>
                         </div>
+                        
+                        {
+                            ((selectedCard?.user_id) as number == parseInt(localStorage.getItem("userId") as string)) ?
+                                <ScrollableAreaComponent></ScrollableAreaComponent> : <div></div>
+                        }
 
                         {/* Card details */}
                         <div className="mt-6 md:mt-10">
