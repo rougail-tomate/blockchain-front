@@ -8,9 +8,18 @@ import { useRouter } from "next/router";
 
 const Assets = (): JSX.Element => {
     const [cards, setCards] = useState<AssetsData[]>([]);
+    const [psaCert, setPsaCert] = useState<number>();
     const router = useRouter();
 
     useEffect(() => {
+        const getCertNumber = () => {
+            const queryParams = new URLSearchParams(window.location.search);
+            const psa_cert = queryParams.get("CertNumber");
+
+            if (psa_cert)
+                setPsaCert(parseInt(psa_cert));
+        }
+
         const fetchNFTs = async () => {
             try {
                 const response: AssetsData[] = await pullNFT();
@@ -20,6 +29,7 @@ const Assets = (): JSX.Element => {
                 console.error("Error fetching NFTs:", error);
             }
         };
+        getCertNumber();
         fetchNFTs();
     }, [])
 
