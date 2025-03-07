@@ -62,7 +62,8 @@ export async function pullNFT(): Promise<AssetsData[]> {
         data.push({
             image: card.image,
             title: card.title,
-            price: card.price
+            price: card.price,
+            CertNumber: card.CertNumber
         });
     });
     return data;

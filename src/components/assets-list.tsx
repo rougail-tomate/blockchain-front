@@ -5,8 +5,8 @@ export interface AssetsData {
     title: string;
     image: string;
     price: string;
+    CertNumber: number;
 }
-
 
 interface AssetsListProps {
     display_text?: string;
@@ -26,7 +26,7 @@ const AssetsList = ({ display_text, hide_button, cards, router }: AssetsListProp
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 place-items-center">
                 { cards.map((card) => (
-                    <div key={ card.title } className="bg-gray-900 p-4 rounded-lg flex flex-col items-start w-full max-w-56">
+                    <div key={ card.CertNumber } className="bg-gray-900 p-4 rounded-lg flex flex-col items-start w-full max-w-56">
                         <div className="w-full h-1/2 bg-gray-800 rounded-md mb-4">
                             <img src={ card.image } alt="" />
                         </div>
