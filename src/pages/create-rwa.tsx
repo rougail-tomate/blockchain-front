@@ -7,6 +7,7 @@ import Button from "@/components/common/Button";
 import InputFloat from "@/components/layout/Input-float";
 import { registerNFT } from "services/nft.service";
 import { useUserStore } from "@/providers/user-store.provider";
+import { refreshAccessToken } from "services/auth.service";
 
 export default function CreateRwaPage(): JSX.Element {
     const [image, setImage] = useState<string | null>(null);
@@ -15,7 +16,7 @@ export default function CreateRwaPage(): JSX.Element {
     const [description, setDescription] = useState("");
     const [start_price, setStartingPrice] = useState("");
     const [base64Image, setBase64Image] = useState<string | null>(null);
-    const { access_token, refresh_token, metamaskId } = useUserStore((state) => state);
+    const store = useUserStore((state) => state);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -34,7 +35,7 @@ export default function CreateRwaPage(): JSX.Element {
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (/^\d*\.?\d*$/.test(value)) {  // Allows only numbers and a single decimal point
+        if (/^\d*\.?\d*$/.test(value)) {
             setStartingPrice(value);
         }
     };
@@ -90,13 +91,22 @@ export default function CreateRwaPage(): JSX.Element {
                         />
                         <div className="flex justify-center items-center">
                             <Button onClick={ async () => {
+                                const new_access_token = await refreshAccessToken(store.refresh_token as string);
+
+                                if (new_access_token === "") {
+                                    console.log("Access token is empty");
+                                    return;
+                                }
+                                store.access_token = new_access_token.access_token;
+                                const { access_token, refresh_token } = store;
+
                                 await registerNFT({
                                     description,
                                     number: parseInt(psaNumber),
                                     image: base64Image,
                                     price: start_price,
                                     title: name,
-                                    wallet: metamaskId,
+                                    wallet: store.metamaskId,
                                 },
                                 {
                                     access_token,

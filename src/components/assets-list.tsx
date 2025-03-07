@@ -1,14 +1,6 @@
 import { NextRouter } from "next/router";
 import { JSX } from "react";
 
-// const cards = [
-//     { id: 1, name: "Card name", price: "2.45 ETH" },
-//     { id: 2, name: "Card name", price: "4.72 ETH" },
-//     { id: 3, name: "Card name", price: "4.72 ETH" },
-//     { id: 4, name: "Card name", price: "4.72 ETH" },
-//     { id: 5, name: "Card name", price: "4.72 ETH" },
-// ];
-
 export interface AssetsData {
     title: string;
     image: string;

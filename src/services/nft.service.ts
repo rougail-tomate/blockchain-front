@@ -1,6 +1,7 @@
 import { AssetsData } from "@/components/assets-list";
 import { useUserStore } from "@/providers/user-store.provider";
 import axios from "axios";
+import { refreshAccessToken } from "./auth.service";
 
 interface NFTRegistrationBody {
     number: number;
@@ -19,7 +20,7 @@ interface NFTRegistrationBody {
 //     image : str
 //     wallet : str
 export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens) {
-    console.log(nftBody);
+    console.log(toks);
 
     const res = await axios.post(
         "http://localhost:8000/users/add-numbers",
@@ -44,7 +45,7 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
 }
 
 export async function pullNFT(): Promise<AssetsData[]> {
-    const res = await axios.get(
+     const res = await axios.get(
         'http://localhost:8000/get-all-numbers',
         {
             headers: {

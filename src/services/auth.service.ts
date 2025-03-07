@@ -13,16 +13,23 @@ interface LoginData {
 }
 
 export async function refreshAccessToken(refresh_token: string) {
-
-    const res = await axios.post(
-        "http://localhost:8000/refresh-token",
-        {
-            headers: {
-               'Content-Type': 'application/json',
-               'Authorization': 'Bearer '
+    try {
+        const res = await axios.post(
+            "http://localhost:8000/refresh-token",
+            {
+                refresh_token
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
-        }
-    );
+        );
+        console.log("Coucou", res);
+        return res.data;
+    } catch(error) {
+        return "";
+    }
 }
 
 export async function Register(data: RegisterData, store: UserStore) {
