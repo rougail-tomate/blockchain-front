@@ -1,4 +1,5 @@
 import { createStore } from 'zustand/vanilla'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type UserState = {
     metamaskId: string | null
@@ -6,6 +7,8 @@ export type UserState = {
     username: string | null
     email: string | null
     password: string | null
+    access_token: string | null
+    refresh_token: string | null
 }
 
 export type UserAction = {
@@ -21,6 +24,8 @@ export const initUserStore = (): UserState => {
         username: null,
         email: null,
         password: null,
+        access_token: null,
+        refresh_token: null
     }
 }
 
@@ -30,13 +35,32 @@ export const defaultUserState: UserState = {
     username: 'test_username',
     email: 'test@gmail.com',
     password: 'azerty',
+    access_token: null,
+    refresh_token: null
 }
+
+// export const createUserStore = (
+//     initState: UserState = defaultUserState,
+// ) => {
+//     return createStore<UserStore>()((set) => ({
+//         ...initState,
+//         resetData: () => set((state) => ({}))
+//     }))
+// }
 
 export const createUserStore = (
     initState: UserState = defaultUserState,
 ) => {
-    return createStore<UserStore>()((set) => ({
-        ...initState,
-        resetData: () => set((state) => ({}))
-    }))
+    return createStore<UserStore>()(
+        persist(
+            (set) => ({
+                ...initState,
+                resetData: () => set(initUserStore())
+            }),
+            {
+                name: 'user-storage',
+                storage: createJSONStorage(() => localStorage)
+            }
+        )
+    )
 }

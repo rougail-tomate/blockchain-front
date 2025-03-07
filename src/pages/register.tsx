@@ -5,6 +5,7 @@ import Input from "@/components/layout/Input";
 import { Register } from "services/auth.service";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/providers/user-store.provider";
+import Button from "@/components/common/Button";
 import { ConnectWalletButton } from "@/components/common/ConnectWalletButton";
 import { MetaMaskProvider } from '@metamask/sdk-react';
 
@@ -15,6 +16,7 @@ const RegisterPage = (): JSX.Element => {
         username: "",
         password: ""
     });
+
     const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
     const sdkOptions = {
         logging: { developerMode: false },
@@ -86,31 +88,28 @@ const RegisterPage = (): JSX.Element => {
             { !isWalletConnected ? (
                 <ConnectWalletButton setConnected={setWalletConnected}/>
             ) : (
-                    <button 
-                    className="border border-light_green
-                                bg-transparent rounded-full w-32 h-10 
-                                hover:bg-light_green hover:text-light_orange"
-                    onClick={ async () => {
-                        if (formData.email === "" ||
-                            formData.password === "" ||
-                            formData.username === ""
-                        ) {
-                            setError(true);
-                            return;
-                        }
-    
-                        const res = await Register({
-                            email: formData.email,
-                            username: formData.username,
-                            password: formData.password
-                        }, store);
-                        
-                        if (res.status == 200)
-                            router.push("/");
-                        else {
-                            setError(true);
-                        } 
-                     }}>Submit</button>
+            <Button 
+                onClick={ async () => {
+                    if (formData.email === "" ||
+                        formData.password === "" ||
+                        formData.username === ""
+                    ) {
+                        setError(true);
+                        return;
+                    }
+
+                    const res = await Register({
+                        email: formData.email,
+                        username: formData.username,
+                        password: formData.password
+                    }, store);
+                    
+                    if (res.status == 200)
+                        router.push("/");
+                    else {
+                        setError(true);
+                    } 
+                 }}>Submit</Button>
                 )}
         </div>
         </MetaMaskProvider>
