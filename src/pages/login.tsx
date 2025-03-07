@@ -15,7 +15,7 @@ const LoginPage = (): JSX.Element => {
 
     const [error, setError] = useState(false);
 
-    const store = useUserStore((state) => state);
+    //const store = useUserStore((state) => state);
 
     const router = useRouter();
 
@@ -66,7 +66,7 @@ const LoginPage = (): JSX.Element => {
                     const res = await Login({
                         username: formData.username,
                         password: formData.password
-                    }, store);
+                    });
                     
                     if (res.status == 200)
                         router.push("/");

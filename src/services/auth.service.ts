@@ -32,7 +32,7 @@ export async function refreshAccessToken(refresh_token: string) {
     }
 }
 
-export async function Register(data: RegisterData, store: UserStore) {
+export async function Register(data: RegisterData) {
     try {
         const res = await axios.post(
             "http://localhost:8000/register",
@@ -40,7 +40,7 @@ export async function Register(data: RegisterData, store: UserStore) {
                 username: data.username,
                 email: data.email,
                 password: data.password,
-                id_metamask: store.metamaskId
+                id_metamask: localStorage.getItem("metamaskId")
             },
             {
                 headers: {
@@ -48,12 +48,14 @@ export async function Register(data: RegisterData, store: UserStore) {
                 },
             },
         );
-        store.access_token = res.data.access_token;
-        store.refresh_token = res.data.refresh_token
-        store.userId = res.data.user.id
-        store.email = res.data.user.email;
-        store.password = data.password;
-        store.username = res.data.user.username;
+
+        localStorage.setItem("access_token", res.data.access_token);
+        localStorage.setItem("refresh_token", res.data.refresh_token);
+        localStorage.setItem("userId", res.data.user.id);
+        localStorage.setItem("email", res.data.user.email);
+        localStorage.setItem("password", data.password);
+        localStorage.setItem("username", res.data.user.username);
+ 
         console.log(res)
         return res;
     } catch(error) {
@@ -76,7 +78,7 @@ export async function Register(data: RegisterData, store: UserStore) {
     }
 }
 
-export async function Login(data: LoginData, store: UserStore) {
+export async function Login(data: LoginData) {
     try {
         const res = await axios.post(
             "http://localhost:8000/login",
@@ -90,10 +92,12 @@ export async function Login(data: LoginData, store: UserStore) {
                 },
             }
         );
-        store.username = data.username
-        store.password = data.password
-        store.access_token = res.data.access_token;
-        store.refresh_token = res.data.refresh_token
+
+        localStorage.setItem("password", data.password);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("access_token", res.data.access_token);
+        localStorage.setItem("refresh_token", res.data.refresh_token);
+
         console.log(res);
         return res;
 

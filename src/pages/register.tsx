@@ -32,7 +32,7 @@ const RegisterPage = (): JSX.Element => {
 
     const [wallet, setWallet] = useState<string>("");
 
-    const store = useUserStore((state) => state);
+    //const store = useUserStore((state) => state);
 
     const router = useRouter();
 
@@ -105,12 +105,12 @@ const RegisterPage = (): JSX.Element => {
                         return;
                     }
 
-                    store.metamaskId = wallet;
+                    localStorage.setItem("metamaskId", wallet);
                     const res = await Register({
                         email: formData.email,
                         username: formData.username,
                         password: formData.password
-                    }, store);
+                    });
                     
                     if (res.status == 200)
                         router.push("/");

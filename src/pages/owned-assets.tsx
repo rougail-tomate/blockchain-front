@@ -9,21 +9,23 @@ import { pullNFTS, pullUserNFTS } from "services/nft.service";
 export default function OwnedAssetsPage() {
 
     const [cards, setCards] = useState<AssetsData[]>([]);
-    const store = useUserStore((state) => state);
-
+    //const store = useUserStore((state) => state);
+    
     const router = useRouter();
 
     useEffect(() => {
         const fetchNFT = async () => {
             try {
-                const new_access_token = await refreshAccessToken(store.refresh_token as string);
+                const refresh_token = localStorage.getItem("refresh_token");
+                const new_access_token = await refreshAccessToken(refresh_token as string);
 
                 if (new_access_token === "") {
                     console.log("Access token is empty");
                     return;
                 }
-                store.access_token = new_access_token.access_token;
-                const { access_token, refresh_token } = store;
+                const access_token = new_access_token.access_token;
+
+                localStorage.setItem("access_token", access_token);
                 const res = await pullUserNFTS({
                     access_token,
                     refresh_token

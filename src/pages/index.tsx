@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { pullNFTS } from "services/nft.service";
 
 export default function Home() {
-    const store = useUserStore((state) => state);
+    //const store = useUserStore((state) => state);
     const [cards, setCards] = useState<AssetsData[]>([]);
 
     const router = useRouter();
-    console.log(store)
+    //console.log(store)
 
     useEffect(() => {
         const fetchNFTs = async () => {

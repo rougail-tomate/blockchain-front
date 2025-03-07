@@ -16,7 +16,7 @@ export default function CreateRwaPage(): JSX.Element {
     const [description, setDescription] = useState("");
     const [start_price, setStartingPrice] = useState("");
     const [base64Image, setBase64Image] = useState<string | null>(null);
-    const store = useUserStore((state) => state);
+    //const store = useUserStore((state) => state);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -92,14 +92,14 @@ export default function CreateRwaPage(): JSX.Element {
 
                         <div className="flex justify-center items-center">
                             <Button onClick={ async () => {
-                                const new_access_token = await refreshAccessToken(store.refresh_token as string);
+                                const refresh_token = localStorage.getItem("refresh_token") as string;
+                                const new_access_token = await refreshAccessToken(refresh_token as string);
 
                                 if (new_access_token === "") {
                                     console.log("Access token is empty");
                                     return;
                                 }
-                                store.access_token = new_access_token.access_token;
-                                const { access_token, refresh_token } = store;
+                                const access_token = new_access_token.access_token;
 
                                 await registerNFT({
                                     description,
@@ -107,7 +107,7 @@ export default function CreateRwaPage(): JSX.Element {
                                     image: base64Image,
                                     price: start_price,
                                     title: name,
-                                    wallet: store.metamaskId,
+                                    wallet: localStorage.getItem("metamaskId"),
                                 },
                                 {
                                     access_token,
