@@ -17,6 +17,7 @@ const RegisterPage = (): JSX.Element => {
         password: ""
     });
 
+
     const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
     const sdkOptions = {
         logging: { developerMode: false },
@@ -26,8 +27,10 @@ const RegisterPage = (): JSX.Element => {
           url: host, // using the host constant defined above
         },
     };
-    const [isWalletConnected, setWalletConnected] = useState(false);
+
     const [error, setError] = useState(false);
+
+    const [wallet, setWallet] = useState<string>("");
 
     const store = useUserStore((state) => state);
 
@@ -41,16 +44,15 @@ const RegisterPage = (): JSX.Element => {
     };
 
     return (
-        <MetaMaskProvider sdkOptions={sdkOptions}>
         <div className="flex flex-col items-center justify-center">
 
-            <Image src={logo} alt="logo" className="h-80 wbru-80"/>
+            <Image src={logo} alt="logo" className="h-60 wbru-60"/>
 
             <div>
                 {error && <h1 className="text-red-500">Error: User already exists!</h1>}
             </div>
 
-            <div className=" pt-20">
+            <div className=" pt-16">
                 <h1 className="text-3xl">Register</h1>
             </div>
 
@@ -83,11 +85,16 @@ const RegisterPage = (): JSX.Element => {
                     onChange={ (e) => handleInputChange(e, "password") } 
                     isPassword={ true } />
 
+                <Input 
+                    placeholder="XRP wallet" 
+                    isPassword={ false }
+                    value={wallet} 
+                    onChange={(e) => setWallet(e.target.value)} 
+                    className="w-full mb-7"/>
+
+
                 {/* TODO !: Place MetaMask button here */}
             </div>
-            { !isWalletConnected ? (
-                <ConnectWalletButton setConnected={setWalletConnected}/>
-            ) : (
             <Button 
                 onClick={ async () => {
                     if (formData.email === "" ||
@@ -98,6 +105,7 @@ const RegisterPage = (): JSX.Element => {
                         return;
                     }
 
+                    store.metamaskId = wallet;
                     const res = await Register({
                         email: formData.email,
                         username: formData.username,
@@ -110,10 +118,8 @@ const RegisterPage = (): JSX.Element => {
                         setError(true);
                     } 
                  }}>Submit</Button>
-                )}
         </div>
-        </MetaMaskProvider>
-     );
+      );
 }
 
 export default RegisterPage;

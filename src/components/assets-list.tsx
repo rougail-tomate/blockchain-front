@@ -18,9 +18,10 @@ interface AssetsListProps {
     hide_button: boolean;
     cards: AssetsData[];
     router?: NextRouter;
+    button_text?: string;
 }
 
-const AssetsList = ({ display_text, hide_button, cards, router }: AssetsListProps): JSX.Element => {
+const AssetsList = ({ display_text, hide_button, cards, router, button_text }: AssetsListProps): JSX.Element => {
     return (
         <div className="text-white p-8">
             <div className="max-w-6xl mx-auto">
@@ -42,7 +43,7 @@ const AssetsList = ({ display_text, hide_button, cards, router }: AssetsListProp
                                         console.log(card.cert_number);
                                         router?.push(`/assets?CertNumber=${card.cert_number}`) 
                                 } } className="border border-light_green text-light_green px-6 py-1 rounded-full text-sm">
-                                    Buy
+                                    { button_text == undefined ? "Buy": button_text }
                                 </button>
                                 <p className="text-light_orange text-xs">{card.price + " ETH"}</p>
                             </div>

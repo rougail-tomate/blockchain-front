@@ -5,7 +5,7 @@ interface RegisterData {
     username: string;
     email: string;
     password: string;
-}
+ }
 
 interface LoginData {
     username: string;

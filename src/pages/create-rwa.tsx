@@ -89,6 +89,7 @@ export default function CreateRwaPage(): JSX.Element {
                             onChange={(e) => setDescription(e.target.value)} 
                             className="border border-light_green bg-transparent focus:ring-2 focus:ring-light_green text-white p-2 rounded w-full" 
                         />
+
                         <div className="flex justify-center items-center">
                             <Button onClick={ async () => {
                                 const new_access_token = await refreshAccessToken(store.refresh_token as string);
