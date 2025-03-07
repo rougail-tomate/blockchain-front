@@ -9,6 +9,7 @@ export default function Home() {
     const store = useUserStore((state) => state);
     const [cards, setCards] = useState<AssetsData[]>([]);
 
+    const router = useRouter();
     console.log(store)
 
     useEffect(() => {
@@ -30,6 +31,7 @@ export default function Home() {
             <AssetsList 
                 display_text="Explore pokemon assets:" 
                 hide_button={ true }
+                router={ router }
                 cards={ cards }>
             </AssetsList>
         </div>

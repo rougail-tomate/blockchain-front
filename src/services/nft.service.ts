@@ -57,13 +57,14 @@ export async function pullNFT(): Promise<AssetsData[]> {
 
     const array = res.data.psaCerts;
     const data: AssetsData[] = [];
+    console.log(array);
 
     array.map((card: AssetsData) => {
         data.push({
             image: card.image,
             title: card.title,
             price: card.price,
-            CertNumber: card.CertNumber
+            cert_number: card.cert_number
         });
     });
     return data;
