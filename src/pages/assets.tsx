@@ -1,14 +1,15 @@
 import { JSX, useEffect, useState } from "react";
 import pikachu from '../../public/pikq.jpg';
-import AssetsList, { AssetsData } from "@/components/assets-list";
+import AssetsList, { AssetsData, FullAssetData } from "@/components/assets-list";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
-import { pullNFT } from "services/nft.service";
+import { pullNFT, pullNFTS } from "services/nft.service";
 import { useRouter } from "next/router";
 
 const Assets = (): JSX.Element => {
     const [cards, setCards] = useState<AssetsData[]>([]);
-    const [psaCert, setPsaCert] = useState<number>();
+    const [selectedCard, setCard] = useState<FullAssetData>();
+
     const router = useRouter();
 
     useEffect(() => {
@@ -16,21 +17,45 @@ const Assets = (): JSX.Element => {
             const queryParams = new URLSearchParams(window.location.search);
             const psa_cert = queryParams.get("CertNumber");
 
-            if (psa_cert)
-                setPsaCert(parseInt(psa_cert));
-        }
+            if (psa_cert) {
+                console.log("PSA CERT", parseInt(psa_cert));
+                return (parseInt(psa_cert));
+            }
+        };
+
+        const fetchNFT = async () => {
+            try {
+                const psaCert = getCertNumber();
+                const res = await pullNFT(psaCert as number);
+
+                console.log("REs ", psaCert);
+                setCard({
+                    cert_number: psaCert as number,
+                    description: res.description,
+                    image: res.image,
+                    price: res.price,
+                    title: res.title,
+                    user_id: res.user_id
+                });
+            } catch(error) {
+                console.error("Error fetching nft: ", error);
+            }
+        };
 
         const fetchNFTs = async () => {
             try {
-                const response: AssetsData[] = await pullNFT();
+                const response: AssetsData[] = await pullNFTS();
 
                 if (response) setCards(response);
             } catch (error) {
                 console.error("Error fetching NFTs:", error);
             }
         };
-        getCertNumber();
-        fetchNFTs();
+
+        Promise.all([
+            fetchNFT(),
+            fetchNFTs()
+        ]);
     }, [])
 
     return (
@@ -41,7 +66,7 @@ const Assets = (): JSX.Element => {
                     
                     {/* Left image */}
                     <div className="flex-grow flex md:mr-[5vw]">
-                        <img src={pikachu.src} alt="Pikachu Card" className="rounded w-full h-auto" />
+                        <img src={ selectedCard?.image } alt="Pikachu Card" className="rounded w-full h-auto" />
                     </div>
 
                     {/* Vertical line */}
@@ -51,7 +76,7 @@ const Assets = (): JSX.Element => {
                     <div className="flex-1">
                         {/* User and Card info */}
                         <div>
-                            <h1 className="text-lg md:text-xl font-bold">Pikachu</h1>
+                            <h1 className="text-lg md:text-xl font-bold">{ selectedCard?.title }</h1>
                             <p className="text-gray-400 mt-2 md:mt-4">posted by: <span className="font-semibold">Jean</span></p>
                         </div>
 
@@ -64,13 +89,13 @@ const Assets = (): JSX.Element => {
                             {/* Price */}
                             <div className="flex justify-between w-full">
                                 <span>Price:</span>
-                                <span className="text-right">4.7 ETH</span>
+                                <span className="text-right">{ selectedCard?.price + " ETH" }</span>
                             </div>
 
                             {/* Mint button */}
                             <div className="mt-2">
                                 <button className="bg-light_green text-black w-full h-[3.2vh] rounded-sm">
-                                    Mint
+                                    Buy
                                 </button>
                             </div>
                         </div>
@@ -79,8 +104,7 @@ const Assets = (): JSX.Element => {
                         <div className="mt-6 md:mt-10">
                             <h3 className="text-xl font-semibold">Details:</h3>
                             <p className="text-gray-400 mt-2 text-sm md:text-base">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam facilisis congue mi at aliquet. 
-                                Praesent nec mauris in eros porttitor pellentesque. Maecenas vestibulum elit quis sapien pretium.
+                                { selectedCard?.description }
                             </p>
                         </div>
 

@@ -8,6 +8,11 @@ export interface AssetsData {
     cert_number: number;
 }
 
+export interface FullAssetData extends AssetsData {
+    description: string;
+    user_id: number;
+}
+
 interface AssetsListProps {
     display_text?: string;
     hide_button: boolean;
@@ -39,7 +44,7 @@ const AssetsList = ({ display_text, hide_button, cards, router }: AssetsListProp
                                 } } className="border border-light_green text-light_green px-6 py-1 rounded-full text-sm">
                                     Buy
                                 </button>
-                                <p className="text-light_orange text-xs">{card.price}</p>
+                                <p className="text-light_orange text-xs">{card.price + " ETH"}</p>
                             </div>
                         </div>
                     </div>

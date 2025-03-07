@@ -38,12 +38,12 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
 
         }
     )
-    console.log(res);
+    console.log("MINTING NFT ", res);
     return res;
 }
 
-export async function pullNFT(): Promise<AssetsData[]> {
-     const res = await axios.get(
+export async function pullNFTS(): Promise<AssetsData[]> {
+    const res = await axios.get(
         'http://localhost:8000/get-all-numbers',
         {
             headers: {
@@ -57,7 +57,6 @@ export async function pullNFT(): Promise<AssetsData[]> {
 
     const array = res.data.psaCerts;
     const data: AssetsData[] = [];
-    console.log(array);
 
     array.map((card: AssetsData) => {
         data.push({
@@ -67,5 +66,24 @@ export async function pullNFT(): Promise<AssetsData[]> {
             cert_number: card.cert_number
         });
     });
+
+    console.log("PULLING NFTS ", array);
     return data;
+}
+
+export async function pullNFT(cert_number: number) {
+    const res = await axios.get(
+        `http://localhost:8000/get-number/${cert_number}`,
+        {
+            headers: {
+                'Content-Type': "application/json"
+            }
+        }
+    )
+
+    console.log("PULLING NFT ", cert_number, res);
+    if (res.data == null || res.data == undefined) {
+        return  [];
+    }
+    return res.data;
 }

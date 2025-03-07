@@ -3,7 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import { useUserStore } from "@/providers/user-store.provider";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { pullNFT } from "services/nft.service";
+import { pullNFTS } from "services/nft.service";
 
 export default function Home() {
     const store = useUserStore((state) => state);
@@ -15,7 +15,7 @@ export default function Home() {
     useEffect(() => {
         const fetchNFTs = async () => {
             try {
-                const response: AssetsData[] = await pullNFT();
+                const response: AssetsData[] = await pullNFTS();
 
                 if (response) setCards(response);
             } catch (error) {
