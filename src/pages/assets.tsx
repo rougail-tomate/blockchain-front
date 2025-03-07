@@ -1,10 +1,28 @@
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import pikachu from '../../public/pikq.jpg';
-import AssetsList from "@/components/assets-list";
+import AssetsList, { AssetsData } from "@/components/assets-list";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
+import { pullNFT } from "services/nft.service";
+import { useRouter } from "next/router";
 
 const Assets = (): JSX.Element => {
+    const [cards, setCards] = useState<AssetsData[]>([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        const fetchNFTs = async () => {
+            try {
+                const response: AssetsData[] = await pullNFT();
+
+                if (response) setCards(response);
+            } catch (error) {
+                console.error("Error fetching NFTs:", error);
+            }
+        };
+        fetchNFTs();
+    }, [])
+
     return (
         <div>
             <Navbar />
@@ -68,7 +86,7 @@ const Assets = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-        <AssetsList display_text="Explore other's pokemon assets:" hide_button={ false }></AssetsList>
+        <AssetsList display_text="Explore other's pokemon assets:" hide_button={ false } cards={ cards } router={ router }></AssetsList>
         </div>
     );
 };

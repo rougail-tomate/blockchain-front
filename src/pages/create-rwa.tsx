@@ -15,10 +15,11 @@ export default function CreateRwaPage(): JSX.Element {
     const [description, setDescription] = useState("");
     const [start_price, setStartingPrice] = useState("");
     const [base64Image, setBase64Image] = useState<string | null>(null);
-    const { access_token, refresh_token } = useUserStore((state) => state);
+    const { access_token, refresh_token, metamaskId } = useUserStore((state) => state);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
+
         if (file) {
             // Create a FileReader to convert the image to Base64
             const reader = new FileReader();
@@ -94,7 +95,8 @@ export default function CreateRwaPage(): JSX.Element {
                                     number: parseInt(psaNumber),
                                     image: base64Image,
                                     price: start_price,
-                                    title: name
+                                    title: name,
+                                    wallet: metamaskId,
                                 },
                                 {
                                     access_token,

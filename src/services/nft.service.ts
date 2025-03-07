@@ -1,3 +1,4 @@
+import { AssetsData } from "@/components/assets-list";
 import { useUserStore } from "@/providers/user-store.provider";
 import axios from "axios";
 
@@ -7,6 +8,7 @@ interface NFTRegistrationBody {
     description: string;
     price: string;
     image: string | null;
+    wallet: string | null;
 }
 
 // class PsaNumberCreate(BaseModel):
@@ -15,6 +17,7 @@ interface NFTRegistrationBody {
 //     description: str
 //     price : str
 //     image : str
+//     wallet : str
 export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens) {
     console.log(nftBody);
 
@@ -25,7 +28,8 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
             "title": nftBody.title,
             "description": nftBody.description,
             "price": nftBody.price,
-            "image": nftBody.image
+            "image": nftBody.image,
+            "wallet": nftBody.wallet
         },
         {
             headers: {
@@ -37,4 +41,30 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
     )
     console.log(res);
     return res;
+}
+
+export async function pullNFT(): Promise<AssetsData[]> {
+    const res = await axios.get(
+        'http://localhost:8000/get-all-numbers',
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    );
+
+    if (res.data == undefined || res.data == null)
+        return [];
+
+    const array = res.data.psaCerts;
+    const data: AssetsData[] = [];
+
+    array.map((card: AssetsData) => {
+        data.push({
+            image: card.image,
+            title: card.title,
+            price: card.price
+        });
+    });
+    return data;
 }
