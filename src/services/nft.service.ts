@@ -20,8 +20,6 @@ interface NFTRegistrationBody {
 //     image : str
 //     wallet : str
 export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens) {
-    console.log(toks);
-
     const res = await axios.post(
         "http://localhost:8000/users/add-numbers",
         {
