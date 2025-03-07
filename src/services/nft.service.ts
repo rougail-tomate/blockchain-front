@@ -10,6 +10,7 @@ interface NFTRegistrationBody {
     price: string;
     image: string | null;
     wallet: string | null;
+    is_selling: boolean;
 }
 
 // class PsaNumberCreate(BaseModel):
@@ -28,7 +29,8 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
             "description": nftBody.description,
             "price": nftBody.price,
             "image": nftBody.image,
-            "wallet": nftBody.wallet
+            "wallet": nftBody.wallet,
+            "is_selling": nftBody.is_selling
         },
         {
             headers: {

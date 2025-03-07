@@ -8,6 +8,7 @@ import InputFloat from "@/components/layout/Input-float";
 import { registerNFT } from "services/nft.service";
 import { useUserStore } from "@/providers/user-store.provider";
 import { refreshAccessToken } from "services/auth.service";
+import CircularLoader from "@/components/loading";
 
 export default function CreateRwaPage(): JSX.Element {
     const [image, setImage] = useState<string | null>(null);
@@ -16,7 +17,14 @@ export default function CreateRwaPage(): JSX.Element {
     const [description, setDescription] = useState("");
     const [start_price, setStartingPrice] = useState("");
     const [base64Image, setBase64Image] = useState<string | null>(null);
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [isChecked, setIsChecked] = useState(true);
+
     //const store = useUserStore((state) => state);
+
+    const handleChange = () => {
+        setIsChecked(!isChecked);
+    };
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -90,30 +98,47 @@ export default function CreateRwaPage(): JSX.Element {
                             className="border border-light_green bg-transparent focus:ring-2 focus:ring-light_green text-white p-2 rounded w-full" 
                         />
 
+                        <div className="flex items-center space-x-2">
+                            <input 
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={handleChange}
+                                className="h-5 w-5 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                            />
+                            <label className="text-white">I wan't to sell this nft</label>
+                        </div>
+
                         <div className="flex justify-center items-center">
-                            <Button onClick={ async () => {
-                                const refresh_token = localStorage.getItem("refresh_token") as string;
-                                const new_access_token = await refreshAccessToken(refresh_token as string);
+                        { 
+                            (!isLoading) ? 
+                                <Button onClick={ async () => {
+                                    const refresh_token = localStorage.getItem("refresh_token") as string;
+                                    const new_access_token = await refreshAccessToken(refresh_token as string);
 
-                                if (new_access_token === "") {
-                                    console.log("Access token is empty");
-                                    return;
-                                }
-                                const access_token = new_access_token.access_token;
+                                    if (new_access_token === "") {
+                                        console.log("Access token is empty");
+                                        return;
+                                    }
+                                    const access_token = new_access_token.access_token;
 
-                                await registerNFT({
-                                    description,
-                                    number: parseInt(psaNumber),
-                                    image: base64Image,
-                                    price: start_price,
-                                    title: name,
-                                    wallet: localStorage.getItem("metamaskId"),
-                                },
-                                {
-                                    access_token,
-                                    refresh_token
-                                });
-                            } }>Submit</Button>
+                                    await registerNFT({
+                                        description: description,
+                                        number: parseInt(psaNumber),
+                                        image: base64Image,
+                                        price: start_price,
+                                        title: name,
+                                        wallet: localStorage.getItem("metamaskId"),
+                                        is_selling: isChecked
+                                    },
+                                    {
+                                        access_token,
+                                        refresh_token
+                                    });
+                                    setLoading(true); 
+                                } }>Submit</Button>
+                             :
+                            <CircularLoader></CircularLoader>
+                        }
                         </div>
                     </div>
                 </div>

@@ -114,8 +114,8 @@ const Assets = (): JSX.Element => {
                         </div>
                         
                         {
-                            ((selectedCard?.user_id) as number == parseInt(localStorage.getItem("userId") as string)) ?
-                                <ScrollableAreaComponent></ScrollableAreaComponent> : <div></div>
+                            ((selectedCard?.user_id) as number != parseInt(localStorage.getItem("userId") as string)) ?
+                                <ScrollableAreaComponent sell_order={ [] }></ScrollableAreaComponent> : <div></div>
                         }
 
                         {/* Card details */}

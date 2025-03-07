@@ -1,4 +1,8 @@
-const ScrollableAreaComponent = () => {
+interface ScrollableAreaProps {
+    sell_order: []
+}
+
+const ScrollableAreaComponent = ({ sell_order }: ScrollableAreaProps) => {
     return (
        <div className="w-full h-64 overflow-y-auto p-4 border border-gray-300 rounded-lg text-white">
             <p className="text-center mb-3">Buy order !</p>
