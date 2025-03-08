@@ -1,5 +1,6 @@
 import { UserStore } from "@stores/user.store";
 import axios from "axios";
+import { api_url } from "./nft.service";
 
 interface RegisterData {
     username: string;
@@ -15,7 +16,7 @@ interface LoginData {
 export async function refreshAccessToken(refresh_token: string) {
     try {
         const res = await axios.post(
-            "https://blockchain.mattisdalleau.com/refresh-token",
+            api_url + "/refresh-token",
             {
                 refresh_token
             },
@@ -35,7 +36,7 @@ export async function refreshAccessToken(refresh_token: string) {
 export async function Register(data: RegisterData) {
     try {
         const res = await axios.post(
-            "https://blockchain.mattisdalleau.com/register",
+            api_url + "/register",
             {
                 username: data.username,
                 email: data.email,
@@ -81,7 +82,7 @@ export async function Register(data: RegisterData) {
 export async function Login(data: LoginData) {
     try {
         const res = await axios.post(
-            "https://blockchain.mattisdalleau.com/login",
+            api_url + "/login",
             {
                 username: data.username,
                 password: data.password,
