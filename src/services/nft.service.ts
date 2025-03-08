@@ -45,7 +45,7 @@ export interface NFTBuyOrderBody {
 //     wallet : str
 export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens) {
     const res = await axios.post(
-        "http://localhost:8000/users/add-numbers",
+        "https://blockchain.mattisdalleau.com/users/add-numbers",
         {
             "number": nftBody.number,
             "title": nftBody.title,
@@ -68,7 +68,7 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
 
 export async function pullNFTS(): Promise<MarketPlace[]> {
     const res = await axios.get(
-        'http://localhost:8000/view-marketplace',
+        'https://blockchain.mattisdalleau.com/view-marketplace',
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export async function pullNFTS(): Promise<MarketPlace[]> {
 
 export async function pullNFT(cert_number: number) {
     const res = await axios.get(
-        `http://localhost:8000/get-number/${cert_number}`,
+        `https://blockchain.mattisdalleau.com/get-number/${cert_number}`,
         {
             headers: {
                 'Content-Type': "application/json"
@@ -113,7 +113,7 @@ export async function pullNFT(cert_number: number) {
 
 export async function pullUserNFTS(user_toks: UserTokens): Promise<MarketPlace[]> {
     const res = await axios.get(
-        'http://localhost:8000/users/get-numbers',
+        'https://blockchain.mattisdalleau.com/users/get-numbers',
         {
             headers: {
                 'Content-Type': "application/json",
@@ -141,7 +141,7 @@ export async function pullUserNFTS(user_toks: UserTokens): Promise<MarketPlace[]
 
 export async function createSellOrder(sell_order: NFTSellOrderBody, toks: UserTokens) {
     const res = await axios.post(
-        'http://localhost:8000/sell',
+        'https://blockchain.mattisdalleau.com/sell',
         {
             cert_number: sell_order.cert_number,
             destination: sell_order.destination,
@@ -162,7 +162,7 @@ export async function createSellOrder(sell_order: NFTSellOrderBody, toks: UserTo
 
 export async function buyNFT(buyBody: NFTBuyOrderBody, token: UserTokens) {
     const res = await axios.post(
-        'http://localhost:8000/buy',
+        'https://blockchain.mattisdalleau.com/buy',
         {
             sell_hash: buyBody.sell_hash
         },

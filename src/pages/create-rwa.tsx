@@ -136,7 +136,6 @@ export default function CreateRwaPage(): JSX.Element {
                                         access_token,
                                         refresh_token
                                     });
-                                    setLoading(false);
                                 } }>Submit</Button>
                              :
                             <CircularLoader></CircularLoader>

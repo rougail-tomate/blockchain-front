@@ -117,24 +117,24 @@ const Assets = (): JSX.Element => {
                                                 if (!displayPrice)
                                                     setDisplayPrice(true);
                                                 else {
-                                                const refresh_token = localStorage.getItem("refresh_token");
-                                                const new_access_token = await refreshAccessToken(refresh_token as string);
+                                                    const refresh_token = localStorage.getItem("refresh_token");
+                                                    const new_access_token = await refreshAccessToken(refresh_token as string);
 
-                                                if (new_access_token === "") {
-                                                    console.log("Access token is empty");
-                                                    return;
-                                                }
-                                                const access_token = new_access_token.access_token;
+                                                    if (new_access_token === "") {
+                                                        console.log("Access token is empty");
+                                                        return;
+                                                    }
+                                                    const access_token = new_access_token.access_token;
 
-                                                localStorage.setItem("access_token", access_token);
-                                                    await createSellOrder({ 
-                                                        cert_number: selectedCard?.cert_number as number,
-                                                        destination: selectedCard?.description as string,
-                                                        taker_pay: parseFloat(start_price) as number,
-                                                        user_id: selectedCard?.user_id as number,
-                                                        sell_hash: ""
-                                                    }, { access_token, refresh_token });
-                                                } 
+                                                    localStorage.setItem("access_token", access_token);
+                                                        await createSellOrder({ 
+                                                            cert_number: selectedCard?.cert_number as number,
+                                                            destination: selectedCard?.description as string,
+                                                            taker_pay: parseFloat(start_price) as number,
+                                                            user_id: selectedCard?.user_id as number,
+                                                            sell_hash: ""
+                                                        }, { access_token, refresh_token });
+                                                    } 
                                             } }>
                                             Sell
                                         </button> :

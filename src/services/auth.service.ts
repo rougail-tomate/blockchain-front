@@ -15,7 +15,7 @@ interface LoginData {
 export async function refreshAccessToken(refresh_token: string) {
     try {
         const res = await axios.post(
-            "http://localhost:8000/refresh-token",
+            "https://blockchain.mattisdalleau.com/refresh-token",
             {
                 refresh_token
             },
@@ -35,7 +35,7 @@ export async function refreshAccessToken(refresh_token: string) {
 export async function Register(data: RegisterData) {
     try {
         const res = await axios.post(
-            "http://localhost:8000/register",
+            "https://blockchain.mattisdalleau.com/register",
             {
                 username: data.username,
                 email: data.email,
@@ -81,7 +81,7 @@ export async function Register(data: RegisterData) {
 export async function Login(data: LoginData) {
     try {
         const res = await axios.post(
-            "http://localhost:8000/login",
+            "https://blockchain.mattisdalleau.com/login",
             {
                 username: data.username,
                 password: data.password,
