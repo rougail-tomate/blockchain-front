@@ -4,11 +4,11 @@ import { useUserStore } from "@/providers/user-store.provider";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { refreshAccessToken } from "services/auth.service";
-import { pullNFTS, pullUserNFTS } from "services/nft.service";
+import { MarketPlace, pullNFTS, pullUserNFTS } from "services/nft.service";
 
 export default function OwnedAssetsPage() {
 
-    const [cards, setCards] = useState<AssetsData[]>([]);
+    const [cards, setCards] = useState<MarketPlace[]>([]);
     //const store = useUserStore((state) => state);
     
     const router = useRouter();
@@ -45,6 +45,7 @@ export default function OwnedAssetsPage() {
             <Navbar></Navbar>
             <AssetsList 
                 display_text="Your assets: "
+                show_own_assets={ true }
                 hide_button={ false }
                 button_text="View"
                 router={ router }

@@ -3,11 +3,11 @@ import Navbar from "@/components/layout/Navbar";
 import { useUserStore } from "@/providers/user-store.provider";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { pullNFTS } from "services/nft.service";
+import { MarketPlace, pullNFTS } from "services/nft.service";
 
 export default function Home() {
     //const store = useUserStore((state) => state);
-    const [cards, setCards] = useState<AssetsData[]>([]);
+    const [cards, setCards] = useState<MarketPlace[]>([]);
 
     const router = useRouter();
     //console.log(store)
@@ -15,7 +15,7 @@ export default function Home() {
     useEffect(() => {
         const fetchNFTs = async () => {
             try {
-                const response: AssetsData[] = await pullNFTS();
+                const response: MarketPlace[] = await pullNFTS();
 
                 if (response) setCards(response);
             } catch (error) {
@@ -31,6 +31,7 @@ export default function Home() {
             <AssetsList 
                 display_text="Explore pokemon assets:" 
                 hide_button={ true }
+                show_own_assets= { false }
                 router={ router }
                 cards={ cards }>
             </AssetsList>

@@ -2,15 +2,26 @@ import { JSX, useEffect, useState } from "react";
 import AssetsList, { AssetsData, FullAssetData } from "@/components/assets-list";
 import Navbar from "@/components/layout/Navbar";
 import React from "react";
-import { pullNFT, pullNFTS } from "services/nft.service";
+import { buyNFT, createSellOrder, MarketPlace, pullNFT, pullNFTS } from "services/nft.service";
 import { useRouter } from "next/router";
 import ScrollableAreaComponent from "@/components/scrollable-area";
+import InputFloat from "@/components/layout/Input-float";
+import { refreshAccessToken } from "services/auth.service";
 
 const Assets = (): JSX.Element => {
-    const [cards, setCards] = useState<AssetsData[]>([]);
+    const [cards, setCards] = useState<MarketPlace[]>([]);
     const [selectedCard, setCard] = useState<FullAssetData>();
-
+    const [displayPrice, setDisplayPrice] = useState<boolean>(false);
+    const [start_price, setStartingPrice] = useState("");
     const router = useRouter();
+
+    
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^\d*\.?\d*$/.test(value)) {
+            setStartingPrice(value);
+        }
+    };
 
     useEffect(() => {
         const getCertNumber = () => {
@@ -28,15 +39,15 @@ const Assets = (): JSX.Element => {
                 const psaCert = getCertNumber();
                 const res = await pullNFT(psaCert as number);
 
-                console.log("REs ", psaCert);
+                console.log("REs ", res);
                 setCard({
                     cert_number: psaCert as number,
-                    description: res.description,
-                    image: res.image,
-                    price: res.price,
-                    title: res.title,
-                    user_id: res.user_id,
-                    owner_id: res.user_id
+                    description: res.psa_cert.description,
+                    image: res.psa_cert.image,
+                    sell_order: res.sell_order,
+                    title: res.psa_cert.title,
+                    user_id: res.psa_cert.user_id,
+                    owner_id: res.psa_cert.user_id,
                 });
             } catch(error) {
                 console.error("Error fetching nft: ", error);
@@ -45,7 +56,7 @@ const Assets = (): JSX.Element => {
 
         const fetchNFTs = async () => {
             try {
-                const response: AssetsData[] = await pullNFTS();
+                const response: MarketPlace[] = await pullNFTS();
 
                 if (response) setCards(response);
             } catch (error) {
@@ -93,7 +104,7 @@ const Assets = (): JSX.Element => {
                             {/* Price */}
                             <div className="flex justify-between w-full">
                                 <span>Price:</span>
-                                <span className="text-right">{ selectedCard?.price + " ETH" }</span>
+                                <span className="text-right">{ (selectedCard?.sell_order?.taker_pay == undefined) ? "Not in sale": selectedCard?.sell_order?.taker_pay + " ETH" }</span>
                             </div>
 
                             {/* Mint button */}
@@ -101,22 +112,69 @@ const Assets = (): JSX.Element => {
                                 {
                                     ((selectedCard?.user_id) as number == parseInt(localStorage.getItem("userId") as string)) ?
                                         // Other nft
-                                        <button className="bg-salmon text-black w-full h-[3.2vh] rounded-sm">
+                                        <button className="bg-salmon text-black w-full h-[3.2vh] rounded-sm"
+                                            onClick={ async () => {
+                                                if (!displayPrice)
+                                                    setDisplayPrice(true);
+                                                else {
+                                                const refresh_token = localStorage.getItem("refresh_token");
+                                                const new_access_token = await refreshAccessToken(refresh_token as string);
+
+                                                if (new_access_token === "") {
+                                                    console.log("Access token is empty");
+                                                    return;
+                                                }
+                                                const access_token = new_access_token.access_token;
+
+                                                localStorage.setItem("access_token", access_token);
+                                                    await createSellOrder({ 
+                                                        cert_number: selectedCard?.cert_number as number,
+                                                        destination: selectedCard?.description as string,
+                                                        taker_pay: parseFloat(start_price) as number,
+                                                        user_id: selectedCard?.user_id as number,
+                                                        sell_hash: ""
+                                                    }, { access_token, refresh_token });
+                                                } 
+                                            } }>
                                             Sell
                                         </button> :
                                         
                                         // My nft
-                                        <button className="bg-light_green text-black w-full h-[3.2vh] rounded-sm">
+                                        <button className="bg-light_green text-black w-full h-[3.2vh] rounded-sm"
+                                            onClick={ async () => {
+                                                const refresh_token = localStorage.getItem("refresh_token");
+                                                const new_access_token = await refreshAccessToken(refresh_token as string);
+
+                                                if (new_access_token === "") {
+                                                    console.log("Access token is empty");
+                                                    return;
+                                                }
+                                                const access_token = new_access_token.access_token;
+
+                                                localStorage.setItem("access_token", access_token);
+                                                await buyNFT({
+                                                    sell_hash: selectedCard?.sell_order.sell_hash as string,
+                                                }, { access_token, refresh_token });
+                                            }}>
                                             Buy
                                         </button>
+                                }
+                                {
+                                    (displayPrice) ? 
+                                    <InputFloat
+                                            placeholder="Selling Price: ETH" 
+                                            value={ start_price } 
+                                            onChange={ handlePriceChange } 
+                                            className="w-full mt-5"/> :
+                                    <div></div>
                                 }
                             </div>
                         </div>
                         
-                        {
+                        {/* {
                             ((selectedCard?.user_id) as number != parseInt(localStorage.getItem("userId") as string)) ?
                                 <ScrollableAreaComponent sell_order={ [] }></ScrollableAreaComponent> : <div></div>
-                        }
+                        } */}
 
                         {/* Card details */}
                         <div className="mt-6 md:mt-10">
@@ -138,7 +196,7 @@ const Assets = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <AssetsList display_text="Explore other's pokemon assets:" hide_button={ false } cards={ cards } router={ router } />
+            <AssetsList display_text="Explore other's pokemon assets:" hide_button={ false } cards={ cards } router={ router } show_own_assets={ false } />
         </div>
     ); 
 };

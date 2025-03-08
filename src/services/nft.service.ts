@@ -7,10 +7,33 @@ interface NFTRegistrationBody {
     number: number;
     title: string;
     description: string;
-    price: string;
+    // price: string;
     image: string | null;
     wallet: string | null;
-    is_selling: boolean;
+    // is_selling: boolean;
+}
+
+export interface MarketPlace {
+    psa_cert: AssetsData;
+    sell_order: NFTSellOrderBody;
+}
+
+
+// class SellOrder(BaseModel):
+//     cert_number: int
+//     user_id: int
+//     taker_pay: float
+//     destination: str
+export interface NFTSellOrderBody {
+    cert_number: number;
+    user_id: number;
+    taker_pay: number;
+    destination: string;
+    sell_hash: string;
+}
+
+export interface NFTBuyOrderBody {
+    sell_hash: string;
 }
 
 // class PsaNumberCreate(BaseModel):
@@ -27,10 +50,10 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
             "number": nftBody.number,
             "title": nftBody.title,
             "description": nftBody.description,
-            "price": nftBody.price,
+            // "price": nftBody.price,
             "image": nftBody.image,
             "wallet": nftBody.wallet,
-            "is_selling": nftBody.is_selling
+            // "is_selling": nftBody.is_selling
         },
         {
             headers: {
@@ -43,9 +66,9 @@ export async function registerNFT(nftBody: NFTRegistrationBody, toks: UserTokens
     return res;
 }
 
-export async function pullNFTS(): Promise<AssetsData[]> {
+export async function pullNFTS(): Promise<MarketPlace[]> {
     const res = await axios.get(
-        'http://localhost:8000/get-all-numbers',
+        'http://localhost:8000/view-marketplace',
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -56,16 +79,14 @@ export async function pullNFTS(): Promise<AssetsData[]> {
     if (res.data == undefined || res.data == null)
         return [];
 
-    const array = res.data.psaCerts;
-    const data: AssetsData[] = [];
+    console.log("View market place ", res);
+    const array = res.data.market_place;
+    const data: MarketPlace[] = [];
 
-    array.map((card: AssetsData) => {
+    array.map((card: MarketPlace) => {
         data.push({
-            image: card.image,
-            title: card.title,
-            price: card.price,
-            cert_number: card.cert_number,
-            owner_id: card.owner_id
+            psa_cert: card.psa_cert,
+            sell_order: card.sell_order
         });
     });
 
@@ -90,7 +111,7 @@ export async function pullNFT(cert_number: number) {
     return res.data;
 }
 
-export async function pullUserNFTS(user_toks: UserTokens): Promise<AssetsData[]> {
+export async function pullUserNFTS(user_toks: UserTokens): Promise<MarketPlace[]> {
     const res = await axios.get(
         'http://localhost:8000/users/get-numbers',
         {
@@ -104,18 +125,55 @@ export async function pullUserNFTS(user_toks: UserTokens): Promise<AssetsData[]>
     if (res.data == undefined || res.data == null)
         return [];
 
-    const array = res.data.psaCerts;
-    const data: AssetsData[] = [];
+    console.log(res.data);
+    const array = res.data.market_place;
+    const data: MarketPlace[] = [];
 
-    array.map((card: AssetsData) => {
+    array.map((card: MarketPlace) => {
         data.push({
-            image: card.image,
-            title: card.title,
-            price: card.price,
-            cert_number: card.cert_number,
-            owner_id: card.owner_id
+            psa_cert: card.psa_cert,
+            sell_order: card.sell_order
         });
     });
     console.log("Pull user nfts: ", res);
     return data;
+}
+
+export async function createSellOrder(sell_order: NFTSellOrderBody, toks: UserTokens) {
+    const res = await axios.post(
+        'http://localhost:8000/sell',
+        {
+            cert_number: sell_order.cert_number,
+            destination: sell_order.destination,
+            user_id: sell_order.user_id,
+            taker_pay: sell_order.taker_pay,
+            sell_hash: ""
+        },
+        {
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': `Bearer ${toks.access_token}`
+            }
+        }
+
+    );
+    return res;
+}
+
+export async function buyNFT(buyBody: NFTBuyOrderBody, token: UserTokens) {
+    const res = await axios.post(
+        'http://localhost:8000/buy',
+        {
+            sell_hash: buyBody.sell_hash
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.access_token}`
+            }
+        }
+
+    );
+    console.log("Res buy nft ", res)
+    return res;
 }

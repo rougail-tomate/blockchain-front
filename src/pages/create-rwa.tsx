@@ -84,12 +84,12 @@ export default function CreateRwaPage(): JSX.Element {
                             className="w-full" 
                         />
 
-                        <InputFloat
-                            placeholder="Starting Price ETH" 
-                            value={ start_price.toString() } 
-                            onChange={ handlePriceChange } 
-                            className="w-full" 
-                        />
+                        {/* <inputfloat
+                            placeholder="starting price eth" 
+                            value={ start_price.tostring() } 
+                            onchange={ handlepricechange } 
+                            classname="w-full" 
+                        /> */}
 
                         <textarea 
                             placeholder="Description" 
@@ -98,7 +98,7 @@ export default function CreateRwaPage(): JSX.Element {
                             className="border border-light_green bg-transparent focus:ring-2 focus:ring-light_green text-white p-2 rounded w-full" 
                         />
 
-                        <div className="flex items-center space-x-2">
+                        {/* <div className="flex items-center space-x-2">
                             <input 
                                 type="checkbox"
                                 checked={isChecked}
@@ -106,7 +106,7 @@ export default function CreateRwaPage(): JSX.Element {
                                 className="h-5 w-5 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                             />
                             <label className="text-white">I wan't to sell this nft</label>
-                        </div>
+                        </div> */}
 
                         <div className="flex justify-center items-center">
                         { 
@@ -121,20 +121,22 @@ export default function CreateRwaPage(): JSX.Element {
                                     }
                                     const access_token = new_access_token.access_token;
 
-                                    await registerNFT({
+                                    setLoading(true); 
+
+                                    registerNFT({
                                         description: description,
                                         number: parseInt(psaNumber),
                                         image: base64Image,
-                                        price: start_price,
+                                        // price: start_price,
                                         title: name,
                                         wallet: localStorage.getItem("metamaskId"),
-                                        is_selling: isChecked
+                                        // is_selling: isChecked
                                     },
                                     {
                                         access_token,
                                         refresh_token
                                     });
-                                    setLoading(true); 
+                                    setLoading(false);
                                 } }>Submit</Button>
                              :
                             <CircularLoader></CircularLoader>
